@@ -16,8 +16,8 @@
         header {
             background: #4CAF50;
             color: white;
-            padding: 1rem 0;
             text-align: center;
+            padding: 1rem;
         }
 
         nav {
@@ -42,20 +42,31 @@
             padding: 2rem;
         }
 
-        .service {
+        .calculator {
             background: white;
-            margin: 1rem 0;
             padding: 1rem;
             border: 1px solid #ddd;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 1rem 0;
+        }
+
+        .preview {
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .preview img {
+            max-width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
 
         footer {
             background: #333;
             color: white;
             text-align: center;
-            padding: 1rem 0;
+            padding: 1rem;
             margin-top: 2rem;
         }
     </style>
@@ -65,41 +76,84 @@
         <h1>Welcome to Digital Printers</h1>
     </header>
     <nav>
-        <a href="#services">Services</a>
+        <a href="#calculator">Flex Calculator</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
     </nav>
     <div class="container">
-        <section id="services">
-            <h2>Our Services</h2>
-            <div class="service">
-                <h3>Business Card Printing</h3>
-                <p>High-quality and customizable business cards to make your first impression count.</p>
-            </div>
-            <div class="service">
-                <h3>Banner Printing</h3>
-                <p>Durable banners for events, promotions, and more.</p>
-            </div>
-            <div class="service">
-                <h3>Flyer Design & Printing</h3>
-                <p>Creative and professional flyers to showcase your business.</p>
+        <!-- Flex Size Calculator -->
+        <section id="calculator" class="calculator">
+            <h2>Flex Size Calculator</h2>
+            <form id="flexForm">
+                <label for="length">Length (in inches):</label><br>
+                <input type="number" id="length" name="length" placeholder="Enter length" required><br><br>
+
+                <label for="width">Width (in inches):</label><br>
+                <input type="number" id="width" name="width" placeholder="Enter width" required><br><br>
+
+                <label for="upload">Upload Image:</label><br>
+                <input type="file" id="upload" accept="image/*" required><br><br>
+
+                <button type="button" onclick="calculateFlexSize()">Calculate & Preview</button>
+            </form>
+
+            <!-- Display Calculations -->
+            <div id="result" style="margin-top: 1rem;"></div>
+
+            <!-- Image Preview -->
+            <div class="preview">
+                <h3>Preview</h3>
+                <img id="previewImage" src="" alt="Uploaded Image" style="display: none;">
             </div>
         </section>
 
+        <!-- About Section -->
         <section id="about">
             <h2>About Us</h2>
             <p>Digital Printers has been a trusted name in the printing industry for over a decade. We provide top-notch printing services tailored to your needs.</p>
         </section>
 
+        <!-- Contact Section -->
         <section id="contact">
             <h2>Contact Us</h2>
             <p>Email: support@digitalprinters.com</p>
             <p>Phone: +1 123 456 7890</p>
-            <p>Address: 123 Printing Lane, Creativity City, 45678</p>
         </section>
     </div>
     <footer>
         <p>&copy; 2025 Digital Printers. All rights reserved.</p>
     </footer>
+
+    <script>
+        function calculateFlexSize() {
+            // Get the input values
+            const length = document.getElementById("length").value;
+            const width = document.getElementById("width").value;
+            const fileInput = document.getElementById("upload");
+            const previewImage = document.getElementById("previewImage");
+            const result = document.getElementById("result");
+
+            // Validate inputs
+            if (!length || !width || !fileInput.files.length) {
+                alert("Please fill in all fields and upload an image.");
+                return;
+            }
+
+            // Calculate area
+            const area = (length * width).toFixed(2);
+            result.innerHTML = `<p><strong>Flex Size:</strong> ${length} x ${width} inches</p>
+                                <p><strong>Total Area:</strong> ${area} square inches</p>`;
+
+            // Preview uploaded image
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewImage.src = e.target.result;
+                previewImage.style.display = "block";
+                previewImage.style.width = `${width}px`;
+                previewImage.style.height = `${length}px`;
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+    </script>
 </body>
 </html>
